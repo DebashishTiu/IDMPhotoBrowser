@@ -59,6 +59,7 @@
 @property (nonatomic) BOOL forceHideStatusBar;
 @property (nonatomic) BOOL usePopAnimation;
 @property (nonatomic) BOOL disableVerticalSwipe;
+@property int selected_idx;
 
 @property (nonatomic) BOOL dismissOnTouch;
 
