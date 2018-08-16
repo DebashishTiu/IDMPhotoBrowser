@@ -759,7 +759,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _commentToolButton = [[UIBarButtonItem alloc] initWithCustomView:btnComment];
     _shareToolButton = [[UIBarButtonItem alloc] initWithCustomView:btnShare];
 
-    
+   
     
     
     _actionButton.tintColor = [UIColor whiteColor];
@@ -940,9 +940,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     
     //amol: add like button
-    [items addObject:_likeToolButton];
-    [items addObject:_commentToolButton];
-    [items addObject:_shareToolButton];
+//    [items addObject:_likeToolButton];
+//    [items addObject:_commentToolButton];
+//    [items addObject:_shareToolButton];
 
     
     if (_displayActionButton)
@@ -1169,8 +1169,14 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     IDMPhoto *photoObj = _photos[index];
     
     //amol: show counts
-    [btnLike setTitle:[@" " stringByAppendingString:photoObj.likes] forState:UIControlStateNormal];
-    [btnComment setTitle:[@" " stringByAppendingString:photoObj.comments] forState:UIControlStateNormal];
+    if(photoObj.likes){
+        
+        [btnLike setTitle:[@" " stringByAppendingString:photoObj.likes] forState:UIControlStateNormal];
+    }
+    
+    if(photoObj.comments){
+        [btnComment setTitle:[@" " stringByAppendingString:photoObj.comments] forState:UIControlStateNormal];
+    }
 
     
     __block __weak IDMPhoto *photo = (IDMPhoto*)page.photo;
@@ -1362,9 +1368,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [_counterLabel setAlpha:alpha];
         [baseBtnView setAlpha:alpha];
         
-        [btnLike setAlpha:alpha];
-        [btnComment setAlpha:alpha];
-        [btnShare setAlpha:alpha];
 
         for (UIView *v in captionViews) v.alpha = alpha;
     } completion:^(BOOL finished) {}];
