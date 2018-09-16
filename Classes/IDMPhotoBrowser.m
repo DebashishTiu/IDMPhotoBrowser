@@ -576,16 +576,38 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 -(void)likeClicked
 {
+    for (int i = 0; i<_photos.count; i++) {
+        IDMPhoto *photo = _photos[i];
+        photo.iLike = !photo.iLike;
+        
+        photo.likes = photo.iLike ? @([photo.likes intValue] + 1).stringValue : @([photo.likes intValue] - 1).stringValue;
+        [_photos replaceObjectAtIndex:i withObject:photo];
+        
+        [btnLike setTitle:[NSString stringWithFormat:@"(%@)",photo.likes] forState:UIControlStateNormal];
+
+    }
+    
+    if (self.customBtnBlock) {
+        self.customBtnBlock(1,_currentPageIndex);
+    }
+    
     NSLog(@"Liked clickedd======");
 }
 
 -(void)commentClicked
 {
+    
+    if (self.customBtnBlock) {
+      self.customBtnBlock(2,_currentPageIndex);
+    }
     NSLog(@"commentClicked clickedd======");
 }
 
 -(void)shareClicked
 {
+    if (self.customBtnBlock) {
+        self.customBtnBlock(3,_currentPageIndex);
+    }
     NSLog(@"shareClicked clickedd======");
 }
 
@@ -698,7 +720,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     
     //  UIImage *likeImage = [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_like.png"];
-   btnLike = [[UIButton alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.view.frame) - 40, 50,40)];
+   btnLike = [[UIButton alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.view.frame) - 40, 70,40)];
     [btnLike setImage:image  forState:UIControlStateNormal];
     [btnLike setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btnLike.tintColor = [UIColor whiteColor];
@@ -714,7 +736,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     image =  [UIImage imageNamed:@"Frameworks/IDMPhotoBrowser.framework/IDMPhotoBrowser.bundle/images/ic_comment_white"];
 
-    btnComment = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(btnLike.frame)+5, btnLike.frame.origin.y, 50, btnLike.frame.size.height)];
+    btnComment = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(btnLike.frame)+5, btnLike.frame.origin.y, 70, btnLike.frame.size.height)];
        [btnComment setImage:image forState:UIControlStateNormal];
     //btnComment.backgroundColor = [UIColor blackColor];
     [btnComment setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -730,7 +752,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     image =  [UIImage imageNamed:@"Frameworks/IDMPhotoBrowser.framework/IDMPhotoBrowser.bundle/images/ic_share_white"];
 
-    btnShare = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(btnComment.frame)+5, btnLike.frame.origin.y, 50, btnLike.frame.size.height)];
+    btnShare = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(btnComment.frame)+5, btnLike.frame.origin.y, 70, btnLike.frame.size.height)];
     [btnShare setImage:image forState:UIControlStateNormal];
     btnShare.tintColor = [UIColor whiteColor];
     //btnShare.backgroundColor = [UIColor blackColor];
@@ -743,7 +765,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     //[self.view addSubview:btnShare];
     
     
-    btnLike.titleLabel.font = btnComment.titleLabel.font = btnShare.titleLabel.font = [UIFont systemFontOfSize:12];
+    btnLike.titleLabel.font = btnComment.titleLabel.font = btnShare.titleLabel.font = [UIFont systemFontOfSize:15];
     
     // Counter Button
     //    _counterButton = [[UIBarButtonItem alloc] initWithCustomView:_counterLabel];
@@ -940,9 +962,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     
     //amol: add like button
-//    [items addObject:_likeToolButton];
-//    [items addObject:_commentToolButton];
-//    [items addObject:_shareToolButton];
+    [items addObject:_likeToolButton];
+    [items addObject:_commentToolButton];
+    [items addObject:_shareToolButton];
 
     
     if (_displayActionButton)
@@ -1171,12 +1193,17 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     //amol: show counts
     if(photoObj.likes){
         
-        [btnLike setTitle:[@" " stringByAppendingString:photoObj.likes] forState:UIControlStateNormal];
+        [btnLike setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.likes]] forState:UIControlStateNormal];
     }
     
     if(photoObj.comments){
-        [btnComment setTitle:[@" " stringByAppendingString:photoObj.comments] forState:UIControlStateNormal];
+        [btnComment setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.comments]] forState:UIControlStateNormal];
     }
+    
+    if(photoObj.shares){
+        [btnShare setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.shares]] forState:UIControlStateNormal];
+    }
+    
 
     
     __block __weak IDMPhoto *photo = (IDMPhoto*)page.photo;
@@ -1538,5 +1565,31 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
 }
 
+-(void)onUserCustomButtonClicked:(PhotoButtonBlock)block
+{
+    self.customBtnBlock = block;
+}
+
+-(void)onCommentSuccess
+{
+    for (int i = 0; i<_photos.count; i++) {
+        IDMPhoto *photo = _photos[i];
+        photo.comments = @([photo.comments intValue] + 1).stringValue;
+        [_photos replaceObjectAtIndex:i withObject:photo];
+        
+        [btnComment setTitle:[NSString stringWithFormat:@"(%@)",photo.comments] forState:UIControlStateNormal];
+    }
+}
+
+-(void)onShareSuccess
+{
+    for (int i = 0; i<_photos.count; i++) {
+        IDMPhoto *photo = _photos[i];
+        photo.shares = @([photo.shares intValue] + 1).stringValue;
+        [_photos replaceObjectAtIndex:i withObject:photo];
+        
+        [btnShare setTitle:[NSString stringWithFormat:@"(%@)",photo.shares] forState:UIControlStateNormal];
+    }
+}
 @end
 

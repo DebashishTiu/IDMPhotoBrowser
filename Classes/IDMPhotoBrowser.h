@@ -14,6 +14,7 @@
 #import "IDMCaptionView.h"
 #import "IDMTapDetectingImageView.h"
 
+typedef void(^PhotoButtonBlock)(int btnIndex, NSInteger photoIndex);
 // Delgate
 @class IDMPhotoBrowser;
 @protocol IDMPhotoBrowserDelegate <NSObject>
@@ -73,6 +74,9 @@
 // Animation time (default .28)
 @property (nonatomic) float animationDuration;
 
+//Like,comment,share blocks
+@property (nonatomic,copy) PhotoButtonBlock customBtnBlock;
+
 // Init
 - (id)initWithPhotos:(NSArray *)photosArray;
 
@@ -94,4 +98,10 @@
 // Get IDMPhoto at index
 - (id<IDMPhoto>)photoAtIndex:(NSUInteger)index;
 
+//Like,comment,share methods
+
+-(void)onUserCustomButtonClicked:(PhotoButtonBlock)block;
+
+-(void)onCommentSuccess;
+-(void)onShareSuccess;
 @end
