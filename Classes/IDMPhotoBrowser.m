@@ -819,6 +819,13 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     return btn;
 }
 
+-(void)hideLikeShareComment
+{
+    btnLike.hidden = YES;
+    btnShare.hidden = YES;
+    btnComment.hidden = YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     // Update
     [self reloadData];

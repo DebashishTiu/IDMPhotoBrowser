@@ -104,4 +104,7 @@ typedef void(^PhotoButtonBlock)(int btnIndex, NSInteger photoIndex);
 
 -(void)onCommentSuccess;
 -(void)onShareSuccess;
+
+-(void)hideLikeShareComment;
+
 @end
