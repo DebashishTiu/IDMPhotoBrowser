@@ -1200,15 +1200,15 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     //amol: show counts
     if(photoObj.likes){
         
-        [btnLike setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.likes]] forState:UIControlStateNormal];
+        [btnLike setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"%@",photoObj.likes]] forState:UIControlStateNormal];
     }
     
     if(photoObj.comments){
-        [btnComment setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.comments]] forState:UIControlStateNormal];
+        [btnComment setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"%@",photoObj.comments]] forState:UIControlStateNormal];
     }
     
     if(photoObj.shares){
-        [btnShare setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"(%@)",photoObj.shares]] forState:UIControlStateNormal];
+        [btnShare setTitle:[@" " stringByAppendingString:[NSString stringWithFormat:@"%@",photoObj.shares]] forState:UIControlStateNormal];
     }
     
 
@@ -1295,7 +1295,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // if ([self isLandscape:orientation]) screenWidth = screenBound.size.height;
     
-    return CGRectMake(screenWidth - 75, 30, 55, 26);
+    return CGRectMake(10, 30, 55, 26);
 }
 
 - (CGRect)frameForCaptionView:(IDMCaptionView *)captionView atIndex:(NSUInteger)index {
